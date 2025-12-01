@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Market Screener Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .active-tab {
+            background-color: #0f172a;
+            color: white;
+        }
+
+        .inactive-tab {
+            background-color: white;
+            color: #475569;
+        }
+
+        .inactive-tab:hover {
+            background-color: #f1f5f9;
+        }
+
+        .code-block {
+            font-family: 'Courier New', monospace;
+            background-color: #1e293b;
+            color: #a5b4fc;
+        }
+    </style>
+    <!-- Chosen Palette: Slate & Indigo - Professional, trustworthy financial aesthetic with warm neutral background -->
+    <!-- Application Structure Plan: Dashboard layout with a left sidebar for navigation (mobile-responsive top bar) and a main content area. Content is divided into three core pillars: 'Multibagger Strategy' (Fundamental Analysis), 'Swing Trade Strategy' (Technical/Fundamental Hybrid), and 'Tool Alternatives' (Comparative Analysis). This structure was chosen to separate distinct investing styles while keeping them accessible in one view. The flow allows users to learn the 'Logic', see the 'Query', and visualize the 'Outcome' for each strategy. -->
+    <!-- Visualization & Content Choices: 
+        1. Multibagger Growth Model (Chart.js Line): Visualizes the ideal exponential growth curve of a multibagger to explain why 'Compounding' matters.
+        2. Swing Trade Volume Pattern (Chart.js Bar): Visualizes volume breakouts which are critical for swing trading, explaining the logic behind the query.
+        3. Tool Comparison Matrix (HTML Grid): Uses a clean grid layout to compare features of Screener, Chartink, etc., for quick decision making.
+        4. Query Builders (Interactive HTML): Simulated terminal-like blocks to show exact Screener.in queries, making the report actionable.
+        NO SVG/Mermaid used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+
+<body class="text-slate-800 antialiased h-screen flex flex-col md:flex-row overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <nav class="md:w-64 bg-white border-r border-slate-200 flex-shrink-0 flex flex-col z-20 shadow-sm">
+        <div class="p-6 border-b border-slate-100 bg-slate-50">
+            <h1 class="text-xl font-bold text-slate-900 tracking-tight">Market<span class="text-indigo-600">Pro</span>
+                Guide</h1>
+            <p class="text-xs text-slate-500 mt-1">Screener.in Mastery</p>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 space-y-2">
+            <button onclick="navigate('overview')" id="nav-overview"
+                class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors active-tab flex items-center">
+                <span>Overview & Basics</span>
+            </button>
+            <button onclick="navigate('multibagger')" id="nav-multibagger"
+                class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors inactive-tab flex items-center">
+                <span>Find Multibaggers</span>
+            </button>
+            <button onclick="navigate('swing')" id="nav-swing"
+                class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors inactive-tab flex items-center">
+                <span>Swing Trading Setup</span>
+            </button>
+            <button onclick="navigate('alternatives')" id="nav-alternatives"
+                class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors inactive-tab flex items-center">
+                <span>Best Alternatives</span>
+            </button>
+            <div class="h-px bg-slate-200 my-2"></div>
+            <button onclick="navigate('screener')" id="nav-screener"
+                class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors inactive-tab flex items-center group">
+                <span class="flex-1">Run Screener</span>
+                <span
+                    class="bg-indigo-100 text-indigo-700 text-[10px] px-1.5 py-0.5 rounded font-bold group-hover:bg-indigo-200">NEW</span>
+            </button>
+        </div>
+        <div class="p-4 border-t border-slate-100 bg-slate-50">
+            <div class="bg-indigo-50 p-3 rounded-md border border-indigo-100">
+                <p class="text-xs text-indigo-700 font-semibold mb-1">Pro Tip</p>
+                <p class="text-xs text-indigo-600">Always cross-verify data with annual reports.</p>
+            </div>
+        </div>
+    </nav>
+    <!-- View: Overview -->
+    <section id="view-overview" class="max-w-5xl mx-auto space-y-8 animate-fade-in">
+        <div class="space-y-4">
+            <h2 class="text-3xl font-bold text-slate-900">Mastering Stock Screening in India</h2>
+            <p class="text-lg text-slate-600 max-w-3xl leading-relaxed">
+                Screener.in is the gold standard for fundamental analysis in the Indian stock market. While it
+                excels at finding long-term compounders ("Multibaggers"), it requires specific queries to unlock its
+                potential. This guide bridges the gap between raw data and actionable insights, covering strategies
+                for both long-term investing and short-term swing trading.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Stat Card 1 -->
+            <div class="glass-panel p-6 rounded-xl">
+                <div class="text-indigo-600 text-sm font-bold uppercase tracking-wider mb-2">Primary Goal</div>
+                <div class="text-2xl font-bold text-slate-800 mb-2">Fundamental Filtering</div>
+                <p class="text-sm text-slate-500">Screener.in is best used to filter 5000+ listed companies down to
+                    a manageable list of 20-30 high-quality businesses.</p>
+            </div>
+            <!-- Stat Card 2 -->
+            <div class="glass-panel p-6 rounded-xl">
+                <div class="text-indigo-600 text-sm font-bold uppercase tracking-wider mb-2">Data Points</div>
+                <div class="text-2xl font-bold text-slate-800 mb-2">10+ Years</div>
+                <p class="text-sm text-slate-500">Access historical Profit & Loss statements, Balance Sheets, and
+                    Cash Flows essential for identifying trends.</p>
+            </div>
+            <!-- Stat Card 3 -->
+            <div class="glass-panel p-6 rounded-xl">
+                <div class="text-indigo-600 text-sm font-bold uppercase tracking-wider mb-2">Customization</div>
+                <div class="text-2xl font-bold text-slate-800 mb-2">Custom Ratios</div>
+                <p class="text-sm text-slate-500">Create your own formulas (e.g., 'Grahm Number', 'PEG Ratio') to
+                    find hidden gems ignored by the market.</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <h3 class="text-xl font-bold text-slate-800 mb-4">The Screening Workflow</h3>
+            <div
+                class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-center md:text-left">
+                <div class="flex-1 px-4">
+                    <div
+                        class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center font-bold mb-2 mx-auto md:mx-0">
+                        1</div>
+                    <h4 class="font-semibold text-slate-900">Define Strategy</h4>
+                    <p class="text-sm text-slate-500 mt-1">Growth vs. Value vs. Swing</p>
+                </div>
+                <div class="hidden md:block text-slate-300 text-2xl">→</div>
+                <div class="flex-1 px-4">
+                    <div
+                        class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center font-bold mb-2 mx-auto md:mx-0">
+                        2</div>
+                    <h4 class="font-semibold text-slate-900">Run Query</h4>
+                    <p class="text-sm text-slate-500 mt-1">Input strict criteria filters</p>
+                </div>
+                <div class="hidden md:block text-slate-300 text-2xl">→</div>
+                <div class="flex-1 px-4">
+                    <div
+                        class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center font-bold mb-2 mx-auto md:mx-0">
+                        3</div>
+                    <h4 class="font-semibold text-slate-900">Analyze Results</h4>
+                    <p class="text-sm text-slate-500 mt-1">Manual verification of list</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- View: Multibagger -->
+    <section id="view-multibagger" class="hidden max-w-5xl mx-auto space-y-8 animate-fade-in">
+        <div class="space-y-4">
+            <h2 class="text-3xl font-bold text-slate-900">Finding Multibaggers</h2>
+            <p class="text-lg text-slate-600 max-w-3xl leading-relaxed">
+                A "Multibagger" is a stock that returns several times its initial investment (10x, 20x). To find
+                these, you need companies with **low market cap**, **high growth rates**, **high capital
+                efficiency**, and **reasonable valuations**.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Logic Column -->
+            <div class="space-y-6">
+                <div class="glass-panel p-6 rounded-xl">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">The Golden Query</h3>
+                    <p class="text-sm text-slate-600 mb-4">Copy and paste this logic into Screener.in's query box to
+                        filter for high-quality small caps.</p>
+
+                    <div class="code-block p-4 rounded-lg text-sm leading-relaxed overflow-x-auto">
+                        Market Capitalization < 5000 AND<br>
+                            Sales growth 3Years > 15 AND<br>
+                            Profit growth 3Years > 20 AND<br>
+                            Return on capital employed > 20 AND<br>
+                            Debt to equity < 0.5 AND<br>
+                                Promoter holding > 50 AND<br>
+                                Pledged percentage < 5 </div>
+
+                                    <div class="mt-4 flex gap-2 flex-wrap">
+                                        <span
+                                            class="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">Small
+                                            Cap</span>
+                                        <span
+                                            class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded">High
+                                            ROCE</span>
+                                        <span
+                                            class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded">Low
+                                            Debt</span>
+                                    </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-lg font-bold text-slate-800 mb-3">Key Metrics Explained</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="w-2 h-2 mt-2 bg-indigo-500 rounded-full mr-3 flex-shrink-0"></span>
+                                <p class="text-sm text-slate-600"><strong>Market Cap < 5000 Cr:</strong> It is
+                                            easier for a small company to double in size than a giant like Reliance.
+                                </p>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="w-2 h-2 mt-2 bg-indigo-500 rounded-full mr-3 flex-shrink-0"></span>
+                                <p class="text-sm text-slate-600"><strong>ROCE > 20%:</strong> Indicates the company
+                                    generates high returns on the capital invested by shareholders and lenders.</p>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="w-2 h-2 mt-2 bg-indigo-500 rounded-full mr-3 flex-shrink-0"></span>
+                                <p class="text-sm text-slate-600"><strong>Promoter Holding > 50%:</strong> Shows
+                                    that the owners have "skin in the game" and believe in the business.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Visualization Column -->
+                <div class="flex flex-col space-y-6">
+                    <div class="glass-panel p-6 rounded-xl flex-1 flex flex-col">
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">Ideal Growth Trajectory</h3>
+                        <p class="text-xs text-slate-500 mb-4">Multibaggers typically exhibit exponential profit
+                            growth while price lags initially (the buying opportunity).</p>
+                        <div class="flex-1 flex items-center justify-center">
+                            <div class="chart-container">
+                                <canvas id="multibaggerChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- View: Swing Trading -->
+    <section id="view-swing" class="hidden max-w-5xl mx-auto space-y-8 animate-fade-in">
+        <div class="space-y-4">
+            <h2 class="text-3xl font-bold text-slate-900">Swing Trading Strategy</h2>
+            <p class="text-lg text-slate-600 max-w-3xl leading-relaxed">
+                Screener.in is primarily a fundamental tool, but it can be used for **Positional Swing Trading**
+                (holding for weeks/months) by combining Price Strength with Fundamental Safety. For pure technical
+                swings (days), other tools are recommended.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Visualization Column -->
+            <div class="flex flex-col space-y-6">
+                <div class="glass-panel p-6 rounded-xl flex-1 flex flex-col">
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">The "Volume Shock" Setup</h3>
+                    <p class="text-xs text-slate-500 mb-4">Look for stocks near 52-week highs with sudden volume
+                        expansion.</p>
+                    <div class="flex-1 flex items-center justify-center">
+                        <div class="chart-container">
+                            <canvas id="swingChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logic Column -->
+            <div class="space-y-6">
+                <div class="glass-panel p-6 rounded-xl">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">Screener.in Technical Query</h3>
+                    <p class="text-sm text-slate-600 mb-4">Use this to find stocks with strong momentum and
+                        fundamental backing.</p>
+
+                    <div class="code-block p-4 rounded-lg text-sm leading-relaxed overflow-x-auto">
+                        Current Price > 0.90 * High Price All Time AND<br>
+                        Current Price < High Price All Time AND<br>
+                            Market Capitalization > 500 AND<br>
+                            Quarterly Profit var > 10 AND<br>
+                            Debt to equity < 1 </div>
+
+                                <div
+                                    class="mt-4 p-3 bg-yellow-50 border border-yellow-100 rounded text-sm text-yellow-800">
+                                    <strong>Note:</strong> Screener cannot filter by "Yesterday's Volume". It only
+                                    has recent data. For Volume breakouts, you must check the charts manually or use
+                                    Chartink.
+                                </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-lg font-bold text-slate-800 mb-3">Why this works?</h3>
+                        <p class="text-sm text-slate-600 mb-3">
+                            This query filters for stocks that are <strong>near their All-Time Highs</strong>
+                            (within 10%). Stock prices tend to move fastest when they break into "Blue Sky
+                            Territory" (new highs) because there is no overhead supply (trapped sellers) left.
+                        </p>
+                        <p class="text-sm text-slate-600">
+                            Adding "Quarterly Profit var > 10" ensures you aren't buying a "pump and dump" but a
+                            company with actual earnings momentum supporting the price.
+                        </p>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- View: Alternatives -->
+    <section id="view-alternatives" class="hidden max-w-5xl mx-auto space-y-8 animate-fade-in">
+        <div class="space-y-4">
+            <h2 class="text-3xl font-bold text-slate-900">Alternative Tools</h2>
+            <p class="text-lg text-slate-600 max-w-3xl leading-relaxed">
+                No single tool does everything perfectly. While Screener.in is king for fundamentals, here are the
+                best alternatives for specific needs.
+            </p>
+        </div>
+
+        <!-- Comparison Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            <!-- Card 1 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                <div
+                    class="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold mb-4">
+                    S</div>
+                <h3 class="font-bold text-slate-800 text-lg">Screener.in</h3>
+                <p class="text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">Best For: Fundamentals
+                </p>
+                <ul class="mt-4 space-y-2 text-sm text-slate-600">
+                    <li class="flex items-center">✅ 10-Year Data</li>
+                    <li class="flex items-center">✅ Custom Ratios</li>
+                    <li class="flex items-center opacity-50">❌ Technical Charts</li>
+                </ul>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                <div
+                    class="h-10 w-10 bg-slate-800 rounded-lg flex items-center justify-center text-white font-bold mb-4">
+                    C</div>
+                <h3 class="font-bold text-slate-800 text-lg">Chartink</h3>
+                <p class="text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">Best For: Technicals</p>
+                <ul class="mt-4 space-y-2 text-sm text-slate-600">
+                    <li class="flex items-center">✅ Complex Screener</li>
+                    <li class="flex items-center">✅ "Crossed above" logic</li>
+                    <li class="flex items-center opacity-50">❌ UI/UX Design</li>
+                </ul>
+                <a href="#"
+                    onclick="alert('Search Chartink for: 15 minute breakout, Volume Shockers, Golden Crossover')"
+                    class="block mt-4 text-xs text-blue-500 hover:underline">View Top Scans</a>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                <div class="h-10 w-10 bg-black rounded-lg flex items-center justify-center text-white font-bold mb-4">
+                    TV</div>
+                <h3 class="font-bold text-slate-800 text-lg">TradingView</h3>
+                <p class="text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">Best For: Charting</p>
+                <ul class="mt-4 space-y-2 text-sm text-slate-600">
+                    <li class="flex items-center">✅ Best Charts</li>
+                    <li class="flex items-center">✅ Pine Script</li>
+                    <li class="flex items-center opacity-50">❌ Expensive Data</li>
+                </ul>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                <div
+                    class="h-10 w-10 bg-green-100 rounded-lg flex items-center justify-center text-green-700 font-bold mb-4">
+                    T</div>
+                <h3 class="font-bold text-slate-800 text-lg">Trendlyne</h3>
+                <p class="text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">Best For: Analysis</p>
+                <ul class="mt-4 space-y-2 text-sm text-slate-600">
+                    <li class="flex items-center">✅ DVM Scores</li>
+                    <li class="flex items-center">✅ SWOT Analysis</li>
+                    <li class="flex items-center opacity-50">❌ Cluttered UI</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bg-indigo-900 text-white p-8 rounded-xl mt-8">
+            <h3 class="text-xl font-bold mb-2">Recommendation</h3>
+            <p class="opacity-90 leading-relaxed">
+                For <strong>Multibaggers</strong>, stick to **Screener.in**. Customize columns to show PEG ratio and
+                5-year sales growth.<br><br>
+                For <strong>Swing Trading</strong>, use **Chartink** to find the candidates (e.g., "Price crossing
+                200 EMA" or "Volume > 2x SMA") and then analyze their charts on **TradingView**.
+            </p>
+        </div>
+    </section>
+
+    <!-- View: Run Screener (Interactive) -->
+    <section id="view-screener" class="hidden max-w-6xl mx-auto space-y-6 animate-fade-in">
+        <div class="space-y-4">
+            <h2 class="text-3xl font-bold text-slate-900">Live Screener Simulator</h2>
+            <p class="text-lg text-slate-600 max-w-3xl leading-relaxed">
+                Test your logic on a sample dataset of top Indian companies. Write queries using standard operators
+                (>, <,=). </p>
+        </div>
+
+        <!-- Query Editor -->
+        <div class="bg-slate-900 p-6 rounded-xl shadow-lg">
+            <label class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Query Editor</label>
+            <div class="flex gap-4">
+                <input type="text" id="queryInput"
+                    class="flex-1 bg-slate-800 border border-slate-700 text-white font-mono text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 placeholder-slate-500"
+                    placeholder="e.g., Market Cap > 100000 AND PE < 25" value="Market Cap > 100000 AND PE < 50">
+                <button onclick="runQuery()"
+                    class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-3 rounded-lg transition-colors flex items-center">
+                    <span class="mr-2">▶</span> Run
+                </button>
+            </div>
+            <div class="mt-3 flex gap-4 text-xs text-slate-500 font-mono">
+                <span>Available Metrics: Market Cap, PE, ROCE, Price, Sales Growth</span>
+            </div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+            <div class="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800">Results <span id="resultCount"
+                        class="ml-2 text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded-full">0</span></h3>
+                <button onclick="resetData()" class="text-xs text-indigo-600 hover:underline">Reset Data</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-100">
+                        <tr>
+                            <th class="px-6 py-3 font-medium">Company</th>
+                            <th class="px-6 py-3 font-medium text-right">Price (₹)</th>
+                            <th class="px-6 py-3 font-medium text-right">Market Cap (Cr)</th>
+                            <th class="px-6 py-3 font-medium text-right">P/E</th>
+                            <th class="px-6 py-3 font-medium text-right">ROCE %</th>
+                            <th class="px-6 py-3 font-medium text-right">Sales Gr %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="screenerResults" class="divide-y divide-slate-100">
+                        <!-- Rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <script>
+        // State Management
+        let currentState = 'overview';
+
+        // Navigation Logic
+        function navigate(viewId) {
+            // Update State
+            currentState = viewId;
+
+            // Hide all sections
+            // Hide all sections
+            ['overview', 'multibagger', 'swing', 'alternatives', 'screener'].forEach(id => {
+                document.getElementById(`view-${id}`).classList.add('hidden');
+                document.getElementById(`nav-${id}`).classList.remove('active-tab');
+                document.getElementById(`nav-${id}`).classList.add('inactive-tab');
+            });
+
+            // Show selected section
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            document.getElementById(`nav-${viewId}`).classList.add('active-tab');
+            document.getElementById(`nav-${viewId}`).classList.remove('inactive-tab');
+
+            // Trigger chart renders if needed
+            if (viewId === 'multibagger') renderMultibaggerChart();
+            if (viewId === 'swing') renderSwingChart();
+        }
+
+        // Chart.js Implementations
+        let multiChartInstance = null;
+        let swingChartInstance = null;
+
+        function renderMultibaggerChart() {
+            const ctx = document.getElementById('multibaggerChart').getContext('2d');
+
+            if (multiChartInstance) multiChartInstance.destroy();
+
+            multiChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                    datasets: [
+                        {
+                            label: 'Stock Price',
+                            data: [100, 110, 150, 250, 500],
+                            borderColor: '#4f46e5',
+                            backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Earnings (EPS)',
+                            data: [10, 12, 18, 28, 45],
+                            borderColor: '#10b981',
+                            borderDash: [5, 5],
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        y: { display: true, title: { display: true, text: 'Growth Index' } }
+                    }
+                }
+            });
+        }
+
+        function renderSwingChart() {
+            const ctx = document.getElementById('swingChart').getContext('2d');
+
+            if (swingChartInstance) swingChartInstance.destroy();
+
+            swingChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5 (Breakout)'],
+                    datasets: [
+                        {
+                            label: 'Volume',
+                            data: [5000, 4800, 5200, 4500, 15000],
+                            backgroundColor: [
+                                '#cbd5e1', '#cbd5e1', '#cbd5e1', '#cbd5e1', '#f59e0b'
+                            ],
+                            yAxisID: 'y',
+                        },
+                        {
+                            label: 'Price',
+                            data: [100, 101, 99, 100, 108],
+                            type: 'line',
+                            borderColor: '#0f172a',
+                            yAxisID: 'y1',
+                            tension: 0.2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.dataset.label + ': ' + context.raw;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Volume' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: 'Price' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- SCREENER ENGINE ---
+
+        // 1. Mock Database (Snapshot of popular Indian stocks)
+        const stockDatabase = [
+            { name: "Reliance Industries", price: 2450, mcap: 1650000, pe: 24.5, roce: 9.8, salesGr: 15 },
+            { name: "TCS", price: 3500, mcap: 1280000, pe: 29.2, roce: 58.0, salesGr: 12 },
+            { name: "HDFC Bank", price: 1600, mcap: 890000, pe: 19.5, roce: 6.5, salesGr: 18 },
+            { name: "Infosys", price: 1450, mcap: 600000, pe: 23.0, roce: 40.0, salesGr: 14 },
+            { name: "ITC", price: 440, mcap: 550000, pe: 28.0, roce: 35.0, salesGr: 8 },
+            { name: "Bajaj Finance", price: 7200, mcap: 430000, pe: 35.0, roce: 12.0, salesGr: 25 },
+            { name: "L&T", price: 2900, mcap: 400000, pe: 32.0, roce: 11.0, salesGr: 10 },
+            { name: "Asian Paints", price: 3200, mcap: 300000, pe: 65.0, roce: 28.0, salesGr: 11 },
+            { name: "Titan", price: 3100, mcap: 275000, pe: 85.0, roce: 24.0, salesGr: 22 },
+            { name: "Nestle India", price: 24000, mcap: 230000, pe: 80.0, roce: 140.0, salesGr: 13 },
+            { name: "Tata Motors", price: 650, mcap: 215000, pe: 18.0, roce: 6.0, salesGr: 24 },
+            { name: "Sun Pharma", price: 1150, mcap: 270000, pe: 30.0, roce: 16.0, salesGr: 12 },
+            { name: "NTPC", price: 240, mcap: 230000, pe: 12.0, roce: 9.5, salesGr: 15 },
+            { name: "Power Grid", price: 210, mcap: 195000, pe: 13.0, roce: 10.0, salesGr: 8 },
+            { name: "Tata Steel", price: 125, mcap: 150000, pe: 15.0, roce: 12.0, salesGr: 5 },
+            { name: "Coal India", price: 350, mcap: 215000, pe: 8.5, roce: 55.0, salesGr: 18 },
+            { name: "HUL", price: 2500, mcap: 580000, pe: 55.0, roce: 28.0, salesGr: 9 },
+            { name: "Maruti Suzuki", price: 10500, mcap: 315000, pe: 28.0, roce: 18.0, salesGr: 16 },
+            { name: "UltraTech Cement", price: 8500, mcap: 245000, pe: 35.0, roce: 14.0, salesGr: 12 },
+            { name: "Pidilite Inds", price: 2600, mcap: 130000, pe: 88.0, roce: 22.0, salesGr: 10 },
+            // Mid/Small Caps for variety
+            { name: "Deepak Nitrite", price: 2100, mcap: 28000, pe: 35.0, roce: 28.0, salesGr: 20 },
+            { name: "Polycab", price: 5200, mcap: 78000, pe: 45.0, roce: 25.0, salesGr: 18 },
+            { name: "CDSL", price: 1800, mcap: 19000, pe: 48.0, roce: 35.0, salesGr: 22 },
+            { name: "IEX", price: 140, mcap: 12500, pe: 38.0, roce: 45.0, salesGr: 14 },
+            { name: "Happiest Minds", price: 850, mcap: 13000, pe: 55.0, roce: 25.0, salesGr: 19 },
+            { name: "KPIT Tech", price: 1500, mcap: 41000, pe: 75.0, roce: 28.0, salesGr: 35 },
+            { name: "Angel One", price: 2800, mcap: 24000, pe: 22.0, roce: 40.0, salesGr: 30 },
+            { name: "BSE Ltd", price: 2200, mcap: 30000, pe: 40.0, roce: 18.0, salesGr: 25 },
+            { name: "Suzlon Energy", price: 40, mcap: 55000, pe: 95.0, roce: 18.0, salesGr: 10 },
+            { name: "Zomato", price: 120, mcap: 105000, pe: 120.0, roce: 2.0, salesGr: 45 }
+        ];
+
+        // 2. Query Parser
+        function runQuery() {
+            const query = document.getElementById('queryInput').value.toLowerCase();
+            const results = stockDatabase.filter(stock => evaluateStock(stock, query));
+            renderTable(results);
+        }
+
+        function evaluateStock(stock, query) {
+            // Map user friendly names to object keys
+            const metrics = {
+                'market cap': stock.mcap,
+                'price': stock.price,
+                'pe': stock.pe,
+                'roce': stock.roce,
+                'sales growth': stock.salesGr
+            };
+
+            // Split by AND to get conditions
+            const conditions = query.split('and');
+
+            return conditions.every(condition => {
+                condition = condition.trim();
+
+                // Find which metric is being used
+                let metricKey = Object.keys(metrics).find(key => condition.includes(key));
+                if (!metricKey) return false; // Invalid metric
+
+                const value = metrics[metricKey];
+                const operator = condition.includes('>') ? '>' : (condition.includes('<') ? '<' : null);
+
+                if (!operator) return false;
+
+                const threshold = parseFloat(condition.split(operator)[1].trim());
+
+                if (operator === '>') return value > threshold;
+                if (operator === '<') return value < threshold;
+                return false;
+            });
+        }
+
+        // 3. Renderer
+        function renderTable(data) {
+            const tbody = document.getElementById('screenerResults');
+            document.getElementById('resultCount').innerText = data.length;
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-slate-500">No companies found matching your criteria.</td></tr>';
+                return;
+            }
+
+            data.forEach(stock => {
+                const row = `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4 font-medium text-slate-900">${stock.name}</td>
+                        <td class="px-6 py-4 text-right text-slate-600">₹${stock.price.toLocaleString()}</td>
+                        <td class="px-6 py-4 text-right text-slate-600">${stock.mcap.toLocaleString()}</td>
+                        <td class="px-6 py-4 text-right text-slate-600">${stock.pe}</td>
+                        <td class="px-6 py-4 text-right text-slate-600">${stock.roce}%</td>
+                        <td class="px-6 py-4 text-right text-slate-600">${stock.salesGr}%</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function resetData() {
+            document.getElementById('queryInput').value = '';
+            renderTable(stockDatabase);
+        }
+
+        // Initial render of screener (empty or full)
+        renderTable(stockDatabase);
+
+        // Initialize First View
+        window.addEventListener('load', () => {
+            navigate('overview');
+        });
+
+    </script>
+</body>
+
+</html>
